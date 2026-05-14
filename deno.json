@@ -1,6 +1,6 @@
 {
   "name": "@casys/mcp-erpnext",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "nodeModulesDir": "auto",
   "tasks": {
     "serve": "deno run --allow-all server.ts --http --port=3012",
@@ -33,16 +33,27 @@
     ]
   },
   "lint": {
-    "exclude": ["src/ui/**/*.tsx", "src/ui/**/*.mjs", "src/ui/node_modules/"],
+    "exclude": [
+      "src/ui/**/*.tsx",
+      "src/ui/**/*.mjs",
+      "src/ui/node_modules/"
+    ],
     "rules": {
-      "exclude": ["require-await"]
+      "exclude": [
+        "require-await"
+      ]
     }
   },
   "fmt": {
-    "exclude": ["src/ui/node_modules/"]
+    "exclude": [
+      "src/ui/node_modules/"
+    ]
   },
   "test": {
-    "exclude": ["src/ui/node_modules/", "src/ui/dist/"]
+    "exclude": [
+      "src/ui/node_modules/",
+      "src/ui/dist/"
+    ]
   },
   "imports": {
     "@casys/mcp-server": "jsr:@casys/mcp-server@^0.17",
