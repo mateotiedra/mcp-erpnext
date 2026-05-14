@@ -300,7 +300,8 @@ Release is intentionally GitHub-driven:
 3. Release Please opens or updates the release PR with the semver bump,
    `CHANGELOG.md`, `deno.json`, and `server.ts`.
 4. Merge the Release Please PR.
-5. `.github/workflows/publish.yml` publishes the released version to JSR and
+5. `.github/workflows/release-please.yml` creates the GitHub release, then calls
+   `.github/workflows/publish.yml` to publish the released version to JSR and
    npm.
 
 Do not bump versions manually unless bypassing Release Please for an emergency

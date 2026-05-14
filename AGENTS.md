@@ -267,15 +267,16 @@ Two GitHub Actions workflows matter:
 1. `.github/workflows/test.yml` runs on pull requests and pushes to `main`:
    `deno fmt --check`, `deno lint`, `deno task check`, UI build, and
    `deno test --allow-all src/`.
-2. `.github/workflows/publish.yml` runs on push to `main`:
+2. `.github/workflows/publish.yml` is reusable/manual:
    - **publish-jsr**: builds UI → `npx jsr publish --allow-dirty`
    - **publish-npm**: builds UI → `scripts/build-node.sh` →
      `npm publish --access public` (skips only if the version is already
      published)
 
-Release Please (`.github/workflows/release-please.yml`) also runs on push to
-`main`. It opens or updates the release PR that bumps `CHANGELOG.md`,
-`deno.json`, and `server.ts`.
+Release Please (`.github/workflows/release-please.yml`) runs on push to `main`.
+It opens or updates the release PR that bumps `CHANGELOG.md`, `deno.json`, and
+`server.ts`. When the release PR is merged and Release Please creates a release,
+it calls the publish workflow.
 
 Run `deno task release:check` locally before merging release-sensitive work. It
 performs the local preflight without publishing anything.
@@ -379,7 +380,8 @@ Normal path:
 2. Push or merge feature/fix commits to `main`.
 3. Let Release Please open/update the release PR.
 4. Review the generated version bump and `CHANGELOG.md`.
-5. Merge the Release Please PR. The publish workflow then ships JSR and npm.
+5. Merge the Release Please PR. The Release Please workflow then creates the
+   release and calls the publish workflow to ship JSR and npm.
 
 Emergency manual path:
 
@@ -388,6 +390,8 @@ Emergency manual path:
 3. Update `CHANGELOG.md` with user-facing changes.
 4. Run `deno task release:check`.
 5. Commit and push to `main`.
+6. Run the `Publish` workflow manually if Release Please is intentionally
+   bypassed.
 
 ## Collaboration Notes
 
