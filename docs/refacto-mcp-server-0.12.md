@@ -4,13 +4,13 @@ Upgrade from 0.9.2 to 0.12.0. Analysis done 2026-03-23 with Codex.
 
 ## New features available
 
-| Feature | Export | Description |
-|---------|--------|-------------|
-| `ToolErrorMapper` | type | Centralized error handling via server config |
-| `ToolAnnotations` | type | readOnlyHint, destructiveHint on tools |
-| `StructuredToolResult` | type | Separate LLM summary from viewer payload |
-| `uiMeta()` | function | Helper to build `_meta.ui` objects |
-| `composeEvents()` | function | Server-side viewer-to-viewer event routing |
+| Feature                | Export   | Description                                  |
+| ---------------------- | -------- | -------------------------------------------- |
+| `ToolErrorMapper`      | type     | Centralized error handling via server config |
+| `ToolAnnotations`      | type     | readOnlyHint, destructiveHint on tools       |
+| `StructuredToolResult` | type     | Separate LLM summary from viewer payload     |
+| `uiMeta()`             | function | Helper to build `_meta.ui` objects           |
+| `composeEvents()`      | function | Server-side viewer-to-viewer event routing   |
 
 ## Refactoring items
 
@@ -23,7 +23,8 @@ Upgrade from 0.9.2 to 0.12.0. Analysis done 2026-03-23 with Codex.
 
 #### 2. Move error wrapping to toolErrorMapper — DONE
 
-- `toolErrorMapper` configured in `server.ts`, try/catch removed from `client.ts`
+- `toolErrorMapper` configured in `server.ts`, try/catch removed from
+  `client.ts`
 
 #### 3. Add ToolAnnotations to all tools — DONE
 
@@ -39,15 +40,19 @@ Upgrade from 0.9.2 to 0.12.0. Analysis done 2026-03-23 with Codex.
 
 #### 6. StructuredToolResult — DONE
 
-- `client.ts:buildHandlersMap()` returns pre-formatted MCP results for viewer tools with both `content` (JSON text for LLM backward compat) and `structuredContent` (data object for viewers)
-- `src/ui/shared/refresh.ts:extractToolResultText()` prefers `structuredContent` over `content[0].text`
+- `client.ts:buildHandlersMap()` returns pre-formatted MCP results for viewer
+  tools with both `content` (JSON text for LLM backward compat) and
+  `structuredContent` (data object for viewers)
+- `src/ui/shared/refresh.ts:extractToolResultText()` prefers `structuredContent`
+  over `content[0].text`
 - Pattern matches mcp-einvoice implementation
 
 ### P2 — Future
 
 #### 5. Compose-ready navigation intents
 
-- **What**: Replace prompt-string sendMessage hints with typed navigation descriptors + `_meta.ui.emits`/`_meta.ui.accepts`
+- **What**: Replace prompt-string sendMessage hints with typed navigation
+  descriptors + `_meta.ui.emits`/`_meta.ui.accepts`
 - **Available now**: `uiMeta()` already supports `emits` and `accepts` arrays
 - **Example**:
   ```ts
@@ -57,13 +62,17 @@ Upgrade from 0.9.2 to 0.12.0. Analysis done 2026-03-23 with Codex.
     accepts: ["setFilter", "refresh"],
   })._meta;
   ```
-- **What's needed**: viewer-side `composeEvents()` listener + server routing logic
-- **Blocked by**: MCP Compose support in hosts (Claude Desktop, etc.) — mcp-einvoice doesn't use it yet either
+- **What's needed**: viewer-side `composeEvents()` listener + server routing
+  logic
+- **Blocked by**: MCP Compose support in hosts (Claude Desktop, etc.) —
+  mcp-einvoice doesn't use it yet either
 - **Files**: `src/tools/viewer-meta.ts`, `src/tools/ui-refresh.ts`, viewers
 - **Effort**: L
 
 ## Dependencies
 
-- `@casys/mcp-server@^0.12` (upgraded, uses `uiMeta` re-exported from mcp-compose)
-- `@casys/mcp-compose@^0.3` (transitive dep, resolved via `npx jsr add` in Node build)
+- `@casys/mcp-server@^0.12` (upgraded, uses `uiMeta` re-exported from
+  mcp-compose)
+- `@casys/mcp-compose@^0.3` (transitive dep, resolved via `npx jsr add` in Node
+  build)
 - Node build uses `npx jsr add` instead of npm for JSR package resolution
