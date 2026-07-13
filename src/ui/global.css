@@ -90,7 +90,8 @@ html {
   overflow: hidden;
 }
 
-html, body {
+html,
+body {
   background: var(--bg-root);
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -124,7 +125,8 @@ body {
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
   }
   50% {
