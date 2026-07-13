@@ -31,7 +31,7 @@ export type ErpNextToolCategory =
 
 /** JSON Schema for tool inputs (MCP wire format) */
 export type JSONSchema = {
-  type: string;
+  type: string | string[];
   properties?: Record<string, JSONSchema>;
   required?: string[];
   description?: string;

@@ -92,17 +92,17 @@ overview.
 
 ## Project (9) → doclist-viewer
 
-| Tool                     | DocType   | Operations                                         |
-| ------------------------ | --------- | -------------------------------------------------- |
-| `erpnext_project_list`   | Project   | List + filters (status, company)                   |
-| `erpnext_project_get`    | Project   | Get by name                                        |
-| `erpnext_project_create` | Project   | Create (name, status, dates, budget, company)      |
-| `erpnext_task_list`      | Task      | List + filters (project, status, priority)         |
-| `erpnext_task_get`       | Task      | Get with dependencies                              |
-| `erpnext_task_create`    | Task      | Create (project, subject, status, priority, dates) |
-| `erpnext_task_update`    | Task      | Update (status, priority, progress, dates)         |
-| `erpnext_timesheet_list` | Timesheet | List + filters (employee, project, status)         |
-| `erpnext_timesheet_get`  | Timesheet | Get with time log details                          |
+| Tool                     | DocType   | Operations                                           |
+| ------------------------ | --------- | ---------------------------------------------------- |
+| `erpnext_project_list`   | Project   | List + filters (status, company)                     |
+| `erpnext_project_get`    | Project   | Get by name                                          |
+| `erpnext_project_create` | Project   | Create (name, status, dates, budget, company)        |
+| `erpnext_task_list`      | Task      | List + filters (project, status, priority)           |
+| `erpnext_task_get`       | Task      | Get with dependencies                                |
+| `erpnext_task_create`    | Task      | Create + native assignment (assignees, ToDo details) |
+| `erpnext_task_update`    | Task      | Update + native assignment (assignees, ToDo details) |
+| `erpnext_timesheet_list` | Timesheet | List + filters (employee, project, status)           |
+| `erpnext_timesheet_get`  | Timesheet | Get with time log details                            |
 
 ## Delivery (5) → doclist-viewer
 

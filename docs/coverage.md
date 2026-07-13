@@ -68,17 +68,17 @@
 
 ### Project (9 tools)
 
-| Tool                     | DocType   | Operations                                              | UI Viewer      |
-| ------------------------ | --------- | ------------------------------------------------------- | -------------- |
-| `erpnext_project_list`   | Project   | List + filters (status, company)                        | doclist-viewer |
-| `erpnext_project_get`    | Project   | Get by name                                             | -              |
-| `erpnext_project_create` | Project   | Create (name, status, dates, budget, company)           | -              |
-| `erpnext_task_list`      | Task      | List + filters (project, status, priority)              | doclist-viewer |
-| `erpnext_task_get`       | Task      | Get by name (with dependencies)                         | -              |
-| `erpnext_task_create`    | Task      | Create (project, subject, status, priority, dates)      | -              |
-| `erpnext_task_update`    | Task      | Update (status, priority, progress, dates, description) | -              |
-| `erpnext_timesheet_list` | Timesheet | List + filters (employee, project, status)              | doclist-viewer |
-| `erpnext_timesheet_get`  | Timesheet | Get by name (with time log details)                     | -              |
+| Tool                     | DocType   | Operations                                           | UI Viewer      |
+| ------------------------ | --------- | ---------------------------------------------------- | -------------- |
+| `erpnext_project_list`   | Project   | List + filters (status, company)                     | doclist-viewer |
+| `erpnext_project_get`    | Project   | Get by name                                          | -              |
+| `erpnext_project_create` | Project   | Create (name, status, dates, budget, company)        | -              |
+| `erpnext_task_list`      | Task      | List + filters (project, status, priority)           | doclist-viewer |
+| `erpnext_task_get`       | Task      | Get by name (with dependencies)                      | -              |
+| `erpnext_task_create`    | Task      | Create + native assignment (assignees, ToDo details) | -              |
+| `erpnext_task_update`    | Task      | Update + native assignment (assignees, ToDo details) | -              |
+| `erpnext_timesheet_list` | Timesheet | List + filters (employee, project, status)           | doclist-viewer |
+| `erpnext_timesheet_get`  | Timesheet | Get by name (with time log details)                  | -              |
 
 ### Setup (2 tools)
 
