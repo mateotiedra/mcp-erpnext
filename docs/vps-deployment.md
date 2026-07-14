@@ -40,9 +40,9 @@ not from a Git checkout, Docker image, or registry release.
 4. **Preserve rollback material** before installation: the current tarball,
    package manifest, lockfile, installed bundle checksum, and deployed commit.
 
-5. **Install the new tarball** with pnpm by updating the existing local
-   `file:` dependency. Do not publish to npm or JSR. Verify the installed
-   package metadata and bundle checksum match the staged tarball.
+5. **Install the new tarball** with pnpm by updating the existing local `file:`
+   dependency. Do not publish to npm or JSR. Verify the installed package
+   metadata and bundle checksum match the staged tarball.
 
 6. **Obtain separate approval before restarting services.** Reload/restart only
    the MCP gateway services that consume this package, one at a time.
