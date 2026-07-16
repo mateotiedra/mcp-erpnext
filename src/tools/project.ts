@@ -9,6 +9,13 @@
 import type { FrappeFilter } from "../api/types.ts";
 import type { ErpNextTool } from "./types.ts";
 import { DOCLIST_META } from "./viewer-meta.ts";
+import {
+  applyAssignment,
+  ASSIGNMENT_INPUT_PROPERTIES,
+  fetchDocAfterAssignment,
+  prepareAssignment,
+  validateAssignees,
+} from "./assignment.ts";
 
 export const projectTools: ErpNextTool[] = [
   // ── Projects ──────────────────────────────────────────────────────────────
@@ -157,7 +164,7 @@ export const projectTools: ErpNextTool[] = [
     name: "erpnext_task_create",
     description:
       "Create a new Task in a project. Requires project and subject. " +
-      "Dates in YYYY-MM-DD format.",
+      "Dates in YYYY-MM-DD format. Use assign_to for Frappe's native assignment workflow; native notifications are sent to assigned users.",
     category: "project",
     inputSchema: {
       type: "object",
@@ -189,6 +196,7 @@ export const projectTools: ErpNextTool[] = [
           type: "string",
           description: "Expected end date YYYY-MM-DD",
         },
+        ...ASSIGNMENT_INPUT_PROPERTIES,
       },
       required: ["project", "subject"],
     },
@@ -198,6 +206,15 @@ export const projectTools: ErpNextTool[] = [
       }
       if (!input.subject) {
         throw new Error("[erpnext_task_create] 'subject' is required");
+      }
+
+      const assignment = prepareAssignment(input, "erpnext_task_create");
+      if (assignment) {
+        await validateAssignees(
+          assignment.assignees,
+          "erpnext_task_create",
+          ctx,
+        );
       }
 
       const data: Record<string, unknown> = {
@@ -212,9 +229,30 @@ export const projectTools: ErpNextTool[] = [
       if (input.exp_end_date) data.exp_end_date = input.exp_end_date as string;
 
       const doc = await ctx.client.create("Task", data);
+      if (!assignment) {
+        return {
+          data: doc,
+          message: `Task ${doc.name} created successfully`,
+        };
+      }
+
+      const assignmentInfo = await applyAssignment(
+        "Task",
+        doc.name as string,
+        assignment,
+        ctx,
+        `[erpnext_task_create] Task ${doc.name} was created, but assignment failed`,
+      );
+      const freshDoc = await fetchDocAfterAssignment(
+        "Task",
+        doc.name as string,
+        ctx,
+        "erpnext_task_create",
+      );
       return {
-        data: doc,
+        data: freshDoc,
         message: `Task ${doc.name} created successfully`,
+        assignment: assignmentInfo,
       };
     },
   },
@@ -245,7 +283,7 @@ export const projectTools: ErpNextTool[] = [
     name: "erpnext_task_update",
     description:
       "Update an existing Task. Pass only the fields you want to change. " +
-      "Commonly used to change status, progress, or dates.",
+      "Commonly used to change status, progress, or dates. Use assign_to for Frappe's native assignment workflow; native notifications are sent to assigned users.",
     category: "project",
     inputSchema: {
       type: "object",
@@ -277,6 +315,7 @@ export const projectTools: ErpNextTool[] = [
           description: "New expected end date YYYY-MM-DD",
         },
         description: { type: "string", description: "New task description" },
+        ...ASSIGNMENT_INPUT_PROPERTIES,
       },
       required: ["name"],
     },
@@ -285,22 +324,67 @@ export const projectTools: ErpNextTool[] = [
         throw new Error("[erpnext_task_update] 'name' is required");
       }
 
-      const { name, ...rest } = input;
-      const data: Record<string, unknown> = {};
-      for (const [k, v] of Object.entries(rest)) {
-        if (v !== undefined) data[k] = v;
+      const assignment = prepareAssignment(input, "erpnext_task_update");
+      if (assignment) {
+        await validateAssignees(
+          assignment.assignees,
+          "erpnext_task_update",
+          ctx,
+        );
       }
 
-      if (Object.keys(data).length === 0) {
+      const data: Record<string, unknown> = {};
+      for (
+        const key of [
+          "status",
+          "priority",
+          "progress",
+          "exp_end_date",
+          "description",
+        ]
+      ) {
+        if (input[key] !== undefined) data[key] = input[key];
+      }
+
+      if (Object.keys(data).length === 0 && !assignment) {
         throw new Error(
           "[erpnext_task_update] At least one field to update is required",
         );
       }
 
-      const doc = await ctx.client.update("Task", name as string, data);
+      const name = input.name as string;
+      if (!assignment) {
+        const doc = await ctx.client.update("Task", name, data);
+        return {
+          data: doc,
+          message: `Task ${name} updated successfully`,
+        };
+      }
+
+      const fieldsUpdated = Object.keys(data).length > 0;
+      if (fieldsUpdated) {
+        await ctx.client.update("Task", name, data);
+      }
+      const failureContext = fieldsUpdated
+        ? `[erpnext_task_update] Task ${name} was updated, but assignment failed`
+        : `[erpnext_task_update] Task ${name} assignment failed`;
+      const assignmentInfo = await applyAssignment(
+        "Task",
+        name,
+        assignment,
+        ctx,
+        failureContext,
+      );
+      const freshDoc = await fetchDocAfterAssignment(
+        "Task",
+        name,
+        ctx,
+        "erpnext_task_update",
+      );
       return {
-        data: doc,
+        data: freshDoc,
         message: `Task ${name} updated successfully`,
+        assignment: assignmentInfo,
       };
     },
   },

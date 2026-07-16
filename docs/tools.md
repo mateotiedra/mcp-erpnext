@@ -1,12 +1,13 @@
-# Tools Reference (120)
+# Tools Reference (122)
 
 Full reference for all ERPNext MCP tools. See [README](../README.md) for
 overview.
 
-## Setup (2)
+## Setup (3)
 
 | Tool                     | DocType | Operations                                     |
 | ------------------------ | ------- | ---------------------------------------------- |
+| `erpnext_user_list`      | User    | List assignable users (enabled System Users)   |
 | `erpnext_company_list`   | Company | List companies                                 |
 | `erpnext_company_create` | Company | Create (name, abbr, currency, country, domain) |
 
@@ -92,17 +93,17 @@ overview.
 
 ## Project (9) → doclist-viewer
 
-| Tool                     | DocType   | Operations                                         |
-| ------------------------ | --------- | -------------------------------------------------- |
-| `erpnext_project_list`   | Project   | List + filters (status, company)                   |
-| `erpnext_project_get`    | Project   | Get by name                                        |
-| `erpnext_project_create` | Project   | Create (name, status, dates, budget, company)      |
-| `erpnext_task_list`      | Task      | List + filters (project, status, priority)         |
-| `erpnext_task_get`       | Task      | Get with dependencies                              |
-| `erpnext_task_create`    | Task      | Create (project, subject, status, priority, dates) |
-| `erpnext_task_update`    | Task      | Update (status, priority, progress, dates)         |
-| `erpnext_timesheet_list` | Timesheet | List + filters (employee, project, status)         |
-| `erpnext_timesheet_get`  | Timesheet | Get with time log details                          |
+| Tool                     | DocType   | Operations                                           |
+| ------------------------ | --------- | ---------------------------------------------------- |
+| `erpnext_project_list`   | Project   | List + filters (status, company)                     |
+| `erpnext_project_get`    | Project   | Get by name                                          |
+| `erpnext_project_create` | Project   | Create (name, status, dates, budget, company)        |
+| `erpnext_task_list`      | Task      | List + filters (project, status, priority)           |
+| `erpnext_task_get`       | Task      | Get with dependencies                                |
+| `erpnext_task_create`    | Task      | Create + native assignment (assignees, ToDo details) |
+| `erpnext_task_update`    | Task      | Update + native assignment (assignees, ToDo details) |
+| `erpnext_timesheet_list` | Timesheet | List + filters (employee, project, status)           |
+| `erpnext_timesheet_get`  | Timesheet | Get with time log details                            |
 
 ## Delivery (5) → doclist-viewer
 
@@ -152,7 +153,7 @@ overview.
 | `erpnext_asset_maintenance_get`  | Asset Maintenance | Get with maintenance tasks                            |
 | `erpnext_asset_category_list`    | Asset Category    | List all categories                                   |
 
-## Generic Operations (7) → doclist-viewer
+## Generic Operations (8) → doclist-viewer
 
 | Tool                 | Operation | Notes                                             |
 | -------------------- | --------- | ------------------------------------------------- |
@@ -163,6 +164,7 @@ overview.
 | `erpnext_doc_delete` | Delete    | Draft documents only                              |
 | `erpnext_doc_submit` | Submit    | Any submittable document                          |
 | `erpnext_doc_cancel` | Cancel    | Any submitted document                            |
+| `erpnext_doc_assign` | Assign    | Native assignment (ToDo + notification) to users  |
 
 ## Kanban (2) → kanban-viewer
 
