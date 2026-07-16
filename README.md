@@ -6,7 +6,7 @@
 [![MCP](https://img.shields.io/badge/MCP-server-1f6feb?logo=modelcontextprotocol&logoColor=white)](https://modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-MCP server for [ERPNext](https://erpnext.com) / Frappe ERP — **123 tools**
+MCP server for [ERPNext](https://erpnext.com) / Frappe ERP — **124 tools**
 across **14 categories**, with **7 interactive UI viewers**.
 
 Connect any MCP-compatible AI agent (Claude Desktop, Claude Code, VS Code
@@ -235,38 +235,39 @@ npm install
 node build-all.mjs
 ```
 
-## Tools (123)
+## Tools (124)
 
 **14 categories** covering the full ERPNext surface. Each `_list` tool returns
 interactive results in the doclist-viewer with row click, inline detail, and
 cross-viewer navigation.
 
-| Category          | Tools | Viewer               | Key capabilities                                                       |
-| ----------------- | ----- | -------------------- | ---------------------------------------------------------------------- |
-| **Sales**         | 17    | doclist / invoice    | Customers, Sales Orders, Invoices, Quotations — CRUD + Submit/Cancel   |
-| **Purchasing**    | 11    | doclist / invoice    | Suppliers, Purchase Orders, Invoices, Receipts                         |
-| **Inventory**     | 9     | doclist / stock      | Items, Stock Balance, Warehouses, Stock Entries                        |
-| **Accounting**    | 6     | doclist              | Accounts, Journal Entries, Payment Entries                             |
-| **HR**            | 12    | doclist              | Employees, Attendance, Leave, Salary, Expenses                         |
-| **Project**       | 9     | doclist              | Projects, Tasks, Timesheets                                            |
-| **Delivery**      | 5     | doclist              | Delivery Notes, Shipments                                              |
-| **Manufacturing** | 7     | doclist              | BOMs, Work Orders, Job Cards                                           |
-| **CRM**           | 8     | doclist              | Leads, Opportunities, Contacts, Campaigns                              |
-| **Assets**        | 8     | doclist              | Assets, Movements, Maintenance, Categories                             |
-| **Operations**    | 9     | doclist              | Generic CRUD + native assignment for **any** DocType (`erpnext_doc_*`) |
-| **Kanban**        | 2     | kanban               | Task/Opportunity/Issue boards with drag-and-drop                       |
-| **Analytics**     | 17    | chart / kpi / funnel | 12 chart types, 5 KPIs, sales funnel                                   |
-| **Setup**         | 3     | —                    | Company creation, assignable user listing                              |
+| Category          | Tools | Viewer               | Key capabilities                                                     |
+| ----------------- | ----- | -------------------- | -------------------------------------------------------------------- |
+| **Sales**         | 17    | doclist / invoice    | Customers, Sales Orders, Invoices, Quotations — CRUD + Submit/Cancel |
+| **Purchasing**    | 11    | doclist / invoice    | Suppliers, Purchase Orders, Invoices, Receipts                       |
+| **Inventory**     | 9     | doclist / stock      | Items, Stock Balance, Warehouses, Stock Entries                      |
+| **Accounting**    | 6     | doclist              | Accounts, Journal Entries, Payment Entries                           |
+| **HR**            | 12    | doclist              | Employees, Attendance, Leave, Salary, Expenses                       |
+| **Project**       | 9     | doclist              | Projects, Tasks, Timesheets                                          |
+| **Delivery**      | 5     | doclist              | Delivery Notes, Shipments                                            |
+| **Manufacturing** | 7     | doclist              | BOMs, Work Orders, Job Cards                                         |
+| **CRM**           | 8     | doclist              | Leads, Opportunities, Contacts, Campaigns                            |
+| **Assets**        | 8     | doclist              | Assets, Movements, Maintenance, Categories                           |
+| **Operations**    | 10    | doclist              | Generic CRUD, native assignment, and file upload for **any** DocType |
+| **Kanban**        | 2     | kanban               | Task/Opportunity/Issue boards with drag-and-drop                     |
+| **Analytics**     | 17    | chart / kpi / funnel | 12 chart types, 5 KPIs, sales funnel                                 |
+| **Setup**         | 3     | —                    | Company creation, assignable user listing                            |
 
 > Full tool reference with all parameters: [`docs/tools.md`](docs/tools.md)
 
 ## Environment Variables
 
-| Variable             | Required | Description                                                                                                   |
-| -------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| `ERPNEXT_URL`        | Yes      | ERPNext base URL — self-hosted (e.g. `http://localhost:8000`) or cloud (e.g. `https://mycompany.erpnext.com`) |
-| `ERPNEXT_API_KEY`    | Yes      | API Key from User Settings                                                                                    |
-| `ERPNEXT_API_SECRET` | Yes      | API Secret from User Settings                                                                                 |
+| Variable                   | Required | Description                                                                                                   |
+| -------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `ERPNEXT_URL`              | Yes      | ERPNext base URL — self-hosted (e.g. `http://localhost:8000`) or cloud (e.g. `https://mycompany.erpnext.com`) |
+| `ERPNEXT_API_KEY`          | Yes      | API Key from User Settings                                                                                    |
+| `ERPNEXT_API_SECRET`       | Yes      | API Secret from User Settings                                                                                 |
+| `ERPNEXT_MAX_UPLOAD_BYTES` | No       | Maximum decoded file-upload size in bytes (positive integer; default: 10 MiB)                                 |
 
 ## Architecture
 
@@ -293,7 +294,7 @@ src/
     manufacturing.ts  # 7 manufacturing tools
     crm.ts            # 8 CRM tools
     assets.ts         # 8 asset tools
-    operations.ts     # 7 generic CRUD tools
+    operations.ts     # 10 generic operations
     setup.ts          # 2 company/setup tools
     kanban.ts         # 2 read-write kanban tools
     analytics.ts      # 17 analytics tools (charts, KPIs, funnel)

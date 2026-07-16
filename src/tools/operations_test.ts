@@ -132,6 +132,142 @@ Deno.test("erpnext_doc_create - works with Item Group (tree doctype)", async () 
   assertEquals(doc.parent_item_group, "All Item Groups");
 });
 
+// ── erpnext_file_upload ────────────────────────────────────────────────────
+
+Deno.test("erpnext_file_upload - is registered with the required schema", () => {
+  const tool = getTool("erpnext_file_upload");
+  assertEquals(tool.category, "operations");
+  assertEquals(tool.inputSchema.required, [
+    "file_name",
+    "content_base64",
+    "attached_to_doctype",
+    "attached_to_name",
+  ]);
+  assertEquals(tool.inputSchema.properties?.is_private, {
+    type: "boolean",
+    description: "Whether the attachment is private. Defaults to true.",
+    default: true,
+  });
+});
+
+Deno.test("erpnext_file_upload - rejects missing required values and invalid filenames", async () => {
+  const tool = getTool("erpnext_file_upload");
+  const ctx = makeCtx(makeMockClient());
+
+  for (
+    const input of [
+      {
+        content_base64: "YQ==",
+        attached_to_doctype: "Task",
+        attached_to_name: "TASK-001",
+      },
+      {
+        file_name: "a.txt",
+        content_base64: "",
+        attached_to_doctype: "Task",
+        attached_to_name: "TASK-001",
+      },
+      {
+        file_name: "a.txt",
+        content_base64: "YQ==",
+        attached_to_doctype: " ",
+        attached_to_name: "TASK-001",
+      },
+      {
+        file_name: "a.txt",
+        content_base64: "YQ==",
+        attached_to_doctype: "Task",
+        attached_to_name: " ",
+      },
+      {
+        file_name: "nested/a.txt",
+        content_base64: "YQ==",
+        attached_to_doctype: "Task",
+        attached_to_name: "TASK-001",
+      },
+      {
+        file_name: "nested\\a.txt",
+        content_base64: "YQ==",
+        attached_to_doctype: "Task",
+        attached_to_name: "TASK-001",
+      },
+      {
+        file_name: "bad\u0000.txt",
+        content_base64: "YQ==",
+        attached_to_doctype: "Task",
+        attached_to_name: "TASK-001",
+      },
+    ]
+  ) {
+    await assertRejects(
+      () => tool.handler(input, ctx),
+      Error,
+      "erpnext_file_upload",
+    );
+  }
+});
+
+Deno.test("erpnext_file_upload - delegates unchanged input and defaults to private", async () => {
+  let captured: Record<string, unknown> = {};
+  const nativeFile = {
+    name: "FILE-001",
+    file_url: "/private/files/report.pdf",
+  };
+  const result = await getTool("erpnext_file_upload").handler(
+    {
+      file_name: "report.pdf",
+      content_base64: "JVBERi0xLjQ=",
+      attached_to_doctype: "Task",
+      attached_to_name: "TASK-001",
+    },
+    makeCtx(makeMockClient({
+      uploadFile: async (input: Record<string, unknown>) => {
+        captured = input;
+        return nativeFile;
+      },
+    })),
+  ) as Record<string, unknown>;
+
+  assertEquals(captured, {
+    fileName: "report.pdf",
+    contentBase64: "JVBERi0xLjQ=",
+    attachedToDoctype: "Task",
+    attachedToName: "TASK-001",
+    isPrivate: true,
+  });
+  assertEquals(result.data, nativeFile);
+  assertEquals(result.message, "report.pdf attached to Task TASK-001");
+});
+
+Deno.test("erpnext_file_upload - preserves explicit public visibility and attachment field", async () => {
+  let captured: Record<string, unknown> = {};
+  await getTool("erpnext_file_upload").handler(
+    {
+      file_name: "photo.png",
+      content_base64: "aGVsbG8=",
+      attached_to_doctype: "Item",
+      attached_to_name: "ITEM-001",
+      attached_to_field: "image",
+      is_private: false,
+    },
+    makeCtx(makeMockClient({
+      uploadFile: async (input: Record<string, unknown>) => {
+        captured = input;
+        return { name: "FILE-002" };
+      },
+    })),
+  );
+
+  assertEquals(captured, {
+    fileName: "photo.png",
+    contentBase64: "aGVsbG8=",
+    attachedToDoctype: "Item",
+    attachedToName: "ITEM-001",
+    attachedToField: "image",
+    isPrivate: false,
+  });
+});
+
 // ── erpnext_doc_list ────────────────────────────────────────────────────────
 
 Deno.test("erpnext_doc_list - has _meta.ui for doclist-viewer", () => {

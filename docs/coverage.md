@@ -1,6 +1,6 @@
 # ERPNext MCP Library - Coverage
 
-## Covered (123 tools, 14 categories)
+## Covered (124 tools, 14 categories)
 
 ### Sales (17 tools)
 
@@ -88,7 +88,7 @@
 | `erpnext_company_list`   | Company | List companies (name, abbr, currency, country)         | doclist-viewer |
 | `erpnext_company_create` | Company | Create company (name, abbr, currency, country, domain) | -              |
 
-### Generic Operations (9 tools)
+### Generic Operations (10 tools)
 
 | Tool                   | DocType | Operations                                       | UI Viewer      |
 | ---------------------- | ------- | ------------------------------------------------ | -------------- |
@@ -101,6 +101,7 @@
 | `erpnext_doc_list`     | Any     | List any DocType with field/filter/limit control | doclist-viewer |
 | `erpnext_doc_assign`   | Any     | Native assignment (ToDo + notification) to users | -              |
 | `erpnext_doc_unassign` | Any     | Remove one user's native assignment              | -              |
+| `erpnext_file_upload`  | Any     | Attach base64 bytes as a native File             | -              |
 
 ### Kanban (2 tools)
 
@@ -199,16 +200,18 @@
 
 ## Available Operations (Generic)
 
-The `operations.ts` tools provide generic CRUD for any ERPNext DocType:
+The `operations.ts` tools provide generic CRUD and native file uploads for any
+ERPNext DocType:
 
-| Operation  | Tool                 | Notes                                                   |
-| ---------- | -------------------- | ------------------------------------------------------- |
-| **Update** | `erpnext_doc_update` | Partial patch — pass only fields to change              |
-| **Delete** | `erpnext_doc_delete` | Draft documents only; submitted must be cancelled first |
-| **Submit** | `erpnext_doc_submit` | Calls `frappe.client.submit`                            |
-| **Cancel** | `erpnext_doc_cancel` | Calls `frappe.client.cancel`                            |
-| **Get**    | `erpnext_doc_get`    | For DocTypes without a dedicated `_get` tool            |
-| **List**   | `erpnext_doc_list`   | Full control: fields, filters, limit, order_by          |
+| Operation  | Tool                  | Notes                                                                                                                                                                                                     |
+| ---------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Update** | `erpnext_doc_update`  | Partial patch — pass only fields to change                                                                                                                                                                |
+| **Delete** | `erpnext_doc_delete`  | Draft documents only; submitted must be cancelled first                                                                                                                                                   |
+| **Submit** | `erpnext_doc_submit`  | Calls `frappe.client.submit`                                                                                                                                                                              |
+| **Cancel** | `erpnext_doc_cancel`  | Calls `frappe.client.cancel`                                                                                                                                                                              |
+| **Get**    | `erpnext_doc_get`     | For DocTypes without a dedicated `_get` tool                                                                                                                                                              |
+| **List**   | `erpnext_doc_list`    | Full control: fields, filters, limit, order_by                                                                                                                                                            |
+| **Upload** | `erpnext_file_upload` | Attach base64 bytes as native `File` (not a local path or URL); requires DocType write permission. Private by default; decoded cap is 10 MiB (positive-integer-byte `ERPNEXT_MAX_UPLOAD_BYTES` override). |
 
 Specific DocTypes also have dedicated submit/cancel tools:
 `erpnext_sales_order_submit/cancel`, `erpnext_sales_invoice_submit`.
