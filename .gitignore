@@ -10,3 +10,6 @@ src/ui/node_modules/
 .serena/
 .DS_Store
 **/.DS_Store
+
+# Graphify output — generated knowledge graph artifacts
+graphify-out/
