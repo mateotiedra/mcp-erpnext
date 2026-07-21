@@ -181,9 +181,9 @@ Registered in `src/ui/viewers.ts` — add new viewer names there and in
 
 ### Server bootstrap
 
-`server.ts` creates a `ConcurrentMCPServer` (from `@casys/mcp-server`),
-registers all tools + UI resources, and starts in stdio or HTTP mode. Supports
-`--http`, `--port=`, `--hostname=`, and `--categories=` flags.
+`server.ts` creates a `McpApp` (from `@casys/mcp-server`), registers all tools +
+UI resources, and starts in stdio or HTTP mode. Supports `--http`, `--port=`,
+`--hostname=`, and `--categories=` flags.
 
 ## Coding Style & Naming Conventions
 
@@ -289,8 +289,7 @@ This project follows **semver** (`MAJOR.MINOR.PATCH`):
 Version locations (both must stay in sync):
 
 1. `deno.json` → `version` field (used by JSR publish and npm build script)
-2. `server.ts` → `ConcurrentMCPServer` constructor `version` parameter (runtime
-   metadata)
+2. `server.ts` → `McpApp` constructor `version` parameter (runtime metadata)
 
 Rules:
 

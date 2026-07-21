@@ -1,7 +1,7 @@
 # Contributing to @casys/mcp-erpnext
 
-Thanks for your interest in improving `@casys/mcp-erpnext`! 🙌 Contributions of
-every size are welcome — a bug report, a new tool, a doc fix, a UI viewer.
+Thanks for your interest in improving `@casys/mcp-erpnext`. Contributions
+welcome — bug reports, new tools, doc fixes, UI viewers.
 
 This guide gets you set up and covers what we expect from a contribution. For
 the full architecture and conventions, see [`AGENTS.md`](AGENTS.md).
@@ -11,7 +11,7 @@ the full architecture and conventions, see [`AGENTS.md`](AGENTS.md).
 - **Report a bug** — use the
   [issue templates](https://github.com/Casys-AI/mcp-erpnext/issues/new/choose)
   (include repro steps and your ERPNext version).
-- **Add or improve a tool** — the 120+ tools live in `src/tools/`, by category.
+- **Add or improve a tool** — the 123 tools live in `src/tools/`, by category.
 - **Add a UI viewer** — interactive MCP App views under `src/ui/`.
 - **Improve docs** — README, guides, or AGENTS.md.
 
