@@ -57,6 +57,16 @@ export { NoopCache } from "./src/cache/noop.ts";
 export type { Cache } from "./src/cache/types.ts";
 export { warmCache } from "./src/cache/warm.ts";
 
+// Re-export link resolution helpers
+export {
+  resolveCustomer,
+  resolveDynamicLink,
+  resolveEmployee,
+  resolveItem,
+  resolveLink,
+  resolveSupplier,
+} from "./src/api/resolve.ts";
+
 // Re-export API types
 export type {
   ErpBin,
