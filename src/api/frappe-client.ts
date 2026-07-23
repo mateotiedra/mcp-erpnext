@@ -564,6 +564,7 @@ export class FrappeClient {
     const fileName = input.fileName.trim();
     const attachedToDoctype = input.attachedToDoctype.trim();
     const attachedToName = input.attachedToName.trim();
+    const attachedToField = input.attachedToField?.trim();
     if (!fileName || /[\\/\0]/.test(fileName)) {
       throw new Error(
         "[FrappeClient] fileName must be a filename without path separators",
@@ -586,8 +587,8 @@ export class FrappeClient {
     form.append("file", new Blob([fileBuffer]), fileName);
     form.append("doctype", attachedToDoctype);
     form.append("docname", attachedToName);
-    if (input.attachedToField?.trim()) {
-      form.append("fieldname", input.attachedToField.trim());
+    if (attachedToField) {
+      form.append("fieldname", attachedToField);
     }
     form.append("is_private", input.isPrivate === false ? "0" : "1");
 
@@ -597,7 +598,19 @@ export class FrappeClient {
       form,
       true,
     );
-    return res.message;
+    const file = res.message;
+    this.invalidate("File", file.name);
+    this.invalidate(attachedToDoctype, attachedToName);
+
+    // Frappe records fieldname on File but does not populate the target Attach
+    // field itself, so mirror the Desk uploader's second mutation here.
+    if (attachedToField) {
+      await this.update(attachedToDoctype, attachedToName, {
+        [attachedToField]: file.file_url,
+      });
+    }
+
+    return file;
   }
 
   /**
@@ -654,14 +667,14 @@ export function getFrappeClient(): FrappeClient {
     apiKey,
     apiSecret,
     cache: getCache(),
-    maxUploadBytes: maxUploadBytesRaw === undefined
-      ? undefined
-      : Number(maxUploadBytesRaw),
+    maxUploadBytes: maxUploadBytesRaw?.trim()
+      ? Number(maxUploadBytesRaw)
+      : undefined,
   });
   return _client;
 }
 
 /** Override the singleton (useful for tests or dependency injection) */
-export function setFrappeClient(client: FrappeClient): void {
+export function setFrappeClient(client: FrappeClient | null): void {
   _client = client;
 }

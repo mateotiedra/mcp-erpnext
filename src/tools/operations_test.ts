@@ -206,6 +206,18 @@ Deno.test("erpnext_file_upload - validates input and delegates to the client", a
     Error,
     "filename without a path",
   );
+  await assertRejects(
+    () =>
+      tool.handler({
+        file_name: "report.pdf",
+        content_base64: "YQ==",
+        attached_to_doctype: "Task",
+        attached_to_name: "TASK-001",
+        attached_to_field: 42,
+      }, makeCtx(makeMockClient())),
+    Error,
+    "attached_to_field",
+  );
 
   let captured: Record<string, unknown> = {};
   const result = await tool.handler(
@@ -253,6 +265,13 @@ Deno.test("erpnext_file_upload - defaults to private", async () => {
     })),
   );
   assertEquals(isPrivate, true);
+});
+
+Deno.test("erpnext_file_upload - is marked destructive", () => {
+  assertEquals(
+    getTool("erpnext_file_upload").annotations?.destructiveHint,
+    true,
+  );
 });
 
 // ── erpnext_doc_list ────────────────────────────────────────────────────────

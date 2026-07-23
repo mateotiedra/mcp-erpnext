@@ -25,6 +25,7 @@ export const operationsTools: ErpNextTool[] = [
 
   {
     name: "erpnext_file_upload",
+    annotations: { destructiveHint: true },
     description:
       "Upload base64-encoded file content and attach it to any ERPNext document. " +
       "Files are private by default.",
@@ -55,7 +56,7 @@ export const operationsTools: ErpNextTool[] = [
         attached_to_field: {
           type: "string",
           description:
-            "Optional document field associated with this attachment.",
+            "Optional Attach or Attach Image field to populate with the uploaded file.",
         },
         is_private: {
           type: "boolean",
@@ -96,6 +97,15 @@ export const operationsTools: ErpNextTool[] = [
       ) {
         throw new Error("[erpnext_file_upload] 'is_private' must be a boolean");
       }
+      if (
+        input.attached_to_field !== undefined &&
+        (typeof input.attached_to_field !== "string" ||
+          !input.attached_to_field.trim())
+      ) {
+        throw new Error(
+          "[erpnext_file_upload] 'attached_to_field' must be a non-empty string",
+        );
+      }
 
       const file = await ctx.client.uploadFile({
         fileName,
@@ -103,7 +113,7 @@ export const operationsTools: ErpNextTool[] = [
         attachedToDoctype: input.attached_to_doctype as string,
         attachedToName: input.attached_to_name as string,
         ...(input.attached_to_field !== undefined
-          ? { attachedToField: input.attached_to_field as string }
+          ? { attachedToField: input.attached_to_field.trim() }
           : {}),
         isPrivate: input.is_private === undefined
           ? true
